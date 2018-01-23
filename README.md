@@ -55,4 +55,20 @@ And tokensregex + semgrex
 ]}
 ```
 
+Supports proxies:
+Create a dictionary and pass the dictionary to any of the methods as a keyword argument. Replace 0.0.0.0 with the proxy server's IP address.
+
+```
+>>> my_proxies = {
+  'http': 0.0.0.0,
+  'https': 0.0.0.0,
+}
+
+>>> nlp.annotate(text, properties={
+  'annotators': 'tokenize,ssplit,pos,depparse,parse',
+  'outputFormat': 'json'
+  },
+  proxies=my_proxies)
+```
+
 The code above is available in [example.py](example.py).

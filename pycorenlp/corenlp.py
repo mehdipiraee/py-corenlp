@@ -7,7 +7,7 @@ class StanfordCoreNLP:
             server_url = server_url[:-1]
         self.server_url = server_url
 
-    def annotate(self, text, properties=None):
+    def annotate(self, text, properties=None, proxies=None):
         assert isinstance(text, str)
         if properties is None:
             properties = {}
@@ -16,7 +16,7 @@ class StanfordCoreNLP:
 
         # Checks that the Stanford CoreNLP server is started.
         try:
-            requests.get(self.server_url)
+            requests.get(self.server_url, proxies=proxies)
         except requests.exceptions.ConnectionError:
             raise Exception('Check whether you have started the CoreNLP server e.g.\n'
             '$ cd stanford-corenlp-full-2015-12-09/ \n'
@@ -36,18 +36,18 @@ class StanfordCoreNLP:
                 pass
         return output
 
-    def tokensregex(self, text, pattern, filter):
-        return self.regex('/tokensregex', text, pattern, filter)
+    def tokensregex(self, text, pattern, filter, proxies=None):
+        return self.regex('/tokensregex', text, pattern, filter, proxies)
 
-    def semgrex(self, text, pattern, filter):
-        return self.regex('/semgrex', text, pattern, filter)
+    def semgrex(self, text, pattern, filter, proxies=None):
+        return self.regex('/semgrex', text, pattern, filter, proxies)
 
-    def regex(self, endpoint, text, pattern, filter):
+    def regex(self, endpoint, text, pattern, filter, proxies=None):
         r = requests.get(
             self.server_url + endpoint, params={
                 'pattern':  pattern,
                 'filter': filter
-            }, data=text)
+            }, data=text, proxies=None)
         output = r.text
         try:
             output = json.loads(r.text)
